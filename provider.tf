@@ -8,25 +8,21 @@ terraform {
 }
 
 variable "elasticsearch_endpoint" {
-  type    = string
-  default = "your-endpoint"
+  type = string
 }
 
 variable "elasticsearch_api_key" {
   type      = string
   sensitive = true
-  default   = "your-api_key"
 }
 
 variable "kibana_endpoint" {
-  type    = string
-  default = "your-endpoint"
+  type = string
 }
 
 variable "kibana_api_key" {
   type      = string
   sensitive = true
-  default   = "your-api_key"
 }
 
 provider "elasticstack" {
