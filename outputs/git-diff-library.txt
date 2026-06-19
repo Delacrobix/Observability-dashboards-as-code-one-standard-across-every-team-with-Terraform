@@ -1,0 +1,13 @@
+diff --git a/dashboards.tf b/dashboards.tf
+index 4e74462..aca8672 100644
+--- a/dashboards.tf
++++ b/dashboards.tf
+@@ -41,7 +41,7 @@ locals {
+     }
+     errors = {
+       chart_type     = "metric"
+-      title          = "Error rate"
++      title          = "Error rate (4xx+5xx)"
+       x_json         = ""
+       y_json         = ""
+       esql_query_tpl = "FROM {idx} | WHERE status >= 400 | STATS errors = COUNT(*)"
