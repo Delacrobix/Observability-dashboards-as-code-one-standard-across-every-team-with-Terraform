@@ -1,0 +1,9 @@
+.env
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.tfstate.lock.info
+crash.log
+crash.*.log

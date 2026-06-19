@@ -48,14 +48,15 @@ locals {
       esql_column    = "errors"
       esql_format    = { type = "number", params = { decimals = 0 } }
     }
-    provider_lat = {
+    saturation = {
       chart_type     = "metric"
-      title          = "Provider latency p95"
+      title          = "Saturation (CPU)"
       x_json         = ""
       y_json         = ""
-      esql_query_tpl = "FROM {idx} | STATS p95 = PERCENTILE(provider_ms, 95)"
-      esql_column    = "p95"
-      esql_format    = { type = "number", params = { decimals = 0 } }
+      # Saturation reads from the metrics index, so this query is not parameterized by {idx}.
+      esql_query_tpl = "FROM metrics-payments-* | STATS avg_cpu = AVG(cpu.pct)"
+      esql_column    = "avg_cpu"
+      esql_format    = { type = "number", params = { decimals = 2 } }
     }
     cart_value = {
       chart_type     = "metric"
@@ -71,7 +72,7 @@ locals {
   teams = {
     payments = {
       index  = "logs-payments-*"
-      panels = ["errors", "provider_lat", "latency", "traffic"]
+      panels = ["errors", "saturation", "latency", "traffic"]
     }
     checkout = {
       index  = "logs-checkout-*"
