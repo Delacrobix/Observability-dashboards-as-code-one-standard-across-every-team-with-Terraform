@@ -1,7 +1,8 @@
-elasticstack_kibana_dashboard.golden_signals["checkout"]: Refreshing state... [id=default/55368936-2217-44c8-a7e6-a6ec4dd4eb98]
 elasticstack_kibana_dashboard.golden_signals["payments"]: Refreshing state... [id=default/9a3e2426-acab-47b8-af40-4dad572f9c66]
+elasticstack_kibana_dashboard.golden_signals["checkout"]: Refreshing state... [id=default/55368936-2217-44c8-a7e6-a6ec4dd4eb98]
 
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
   ~ update in-place
 
 Terraform will perform the following actions:
@@ -9,365 +10,542 @@ Terraform will perform the following actions:
   # elasticstack_kibana_dashboard.golden_signals["checkout"] will be updated in-place
   ~ resource "elasticstack_kibana_dashboard" "golden_signals" {
         id               = "default/55368936-2217-44c8-a7e6-a6ec4dd4eb98"
-      ~ panels           = [
+      ~ sections         = [
           ~ {
-              ~ config_json = jsonencode(
-                    {
-                      - data_source           = {
-                          - query = "FROM logs-checkout-* | WHERE status >= 500 | STATS errors = COUNT(*)"
-                          - type  = "esql"
-                        }
-                      - ignore_global_filters = false
-                      - metrics               = [
-                          - {
-                              - color  = {
-                                  - type = "auto"
-                                }
-                              - column = "errors"
-                              - type   = "primary"
-                            },
-                        ]
-                      - sampling              = 1
-                      - styling               = {
-                          - primary = {
-                              - labels   = {
-                                  - alignment = "left"
-                                }
-                              - position = "bottom"
-                              - value    = {
-                                  - alignment = "right"
-                                  - sizing    = "auto"
-                                }
-                            }
-                        }
-                      - title                 = "Error rate"
-                      - type                  = "metric"
-                    }
-                ) -> (known after apply)
-                id          = "3db6099e-8003-49eb-8188-25bb9db8cafe"
-              ~ vis_config  = {
-                  ~ by_value = {
-                      ~ metric_chart_config = {
-                          ~ data_source_json      = jsonencode(
-                              ~ {
-                                  ~ query = "FROM logs-checkout-* | WHERE status >= 500 | STATS errors = COUNT(*)" -> "FROM logs-checkout-* | WHERE status >= 400 | STATS errors = COUNT(*)"
+                id        = "248bd38e-922a-473f-b0e1-88f139e9c63a"
+              ~ panels    = [
+                  ~ {
+                      ~ config_json = jsonencode(
+                          ~ {
+                              ~ data_source           = {
+                                  ~ query = "FROM logs-checkout-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))" -> "FROM logs-checkout-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 503, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
                                     # (1 unchanged attribute hidden)
                                 }
-                            )
-                          ~ ignore_global_filters = false -> (known after apply)
-                          ~ sampling              = 1 -> (known after apply)
-                            # (2 unchanged attributes hidden)
-                        }
-                    }
-                }
-                # (2 unchanged attributes hidden)
+                                # (5 unchanged attributes hidden)
+                            }
+                        )
+                        id          = "7f094b74-011c-4ebb-af90-858f760d22d8"
+                        # (2 unchanged attributes hidden)
+                    },
+                    # (3 unchanged elements hidden)
+                ]
+                # (3 unchanged attributes hidden)
             },
           ~ {
-              ~ config_json = jsonencode(
-                    {
-                      - data_source           = {
-                          - query = "FROM logs-checkout-* | STATS total = SUM(cart_total)"
-                          - type  = "esql"
-                        }
-                      - ignore_global_filters = false
-                      - metrics               = [
-                          - {
-                              - color  = {
-                                  - type = "auto"
+                id        = "08c9af2c-04d4-4d8a-8ecf-9df57451173d"
+              ~ panels    = [
+                  ~ {
+                      ~ config_json = jsonencode(
+                            {
+                              - axis    = {
+                                  - x = {
+                                      - domain = {
+                                          - rounding = false
+                                          - type     = "fit"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - y = {
+                                      - domain = {
+                                          - rounding = true
+                                          - type     = "full"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - scale  = "linear"
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
                                 }
-                              - column = "total"
-                              - type   = "primary"
-                            },
-                        ]
-                      - sampling              = 1
-                      - styling               = {
-                          - primary = {
-                              - labels   = {
-                                  - alignment = "left"
+                              - layers  = [
+                                  - {
+                                      - data_source           = {
+                                          - index_pattern = "logs-checkout-*"
+                                          - time_field    = "@timestamp"
+                                          - type          = "data_view_spec"
+                                        }
+                                      - ignore_global_filters = false
+                                      - sampling              = 1
+                                      - type                  = "area"
+                                      - x                     = {
+                                          - drop_partial_intervals  = false
+                                          - field                   = "@timestamp"
+                                          - include_empty_rows      = true
+                                          - operation               = "date_histogram"
+                                          - suggested_interval      = "auto"
+                                          - use_original_time_range = false
+                                        }
+                                      - y                     = [
+                                          - {
+                                              - color      = {
+                                                  - type = "auto"
+                                                }
+                                              - field      = "duration_ms"
+                                              - operation  = "percentile"
+                                              - percentile = 95
+                                            },
+                                        ]
+                                    },
+                                ]
+                              - legend  = {
+                                  - layout     = {
+                                      - truncate = {
+                                          - max_lines = 1
+                                        }
+                                      - type     = "grid"
+                                    }
+                                  - placement  = "outside"
+                                  - position   = "bottom"
+                                  - visibility = "visible"
                                 }
-                              - position = "bottom"
-                              - value    = {
-                                  - alignment = "right"
-                                  - sizing    = "auto"
+                              - styling = {
+                                  - areas         = {
+                                      - fill_opacity = 0.3
+                                    }
+                                  - fitting       = {
+                                      - type = "none"
+                                    }
+                                  - interpolation = "linear"
+                                  - overlays      = {
+                                      - current_time_marker = {
+                                          - visible = false
+                                        }
+                                      - partial_buckets     = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - points        = {
+                                      - visibility = "auto"
+                                    }
                                 }
+                              - title   = "Latency p95"
+                              - type    = "xy"
                             }
-                        }
-                      - title                 = "Cart value"
-                      - type                  = "metric"
-                    }
-                ) -> (known after apply)
-                id          = "47663346-0eb3-4778-912c-4d2053a45e5d"
-              ~ vis_config  = {
-                  ~ by_value = {
-                      ~ metric_chart_config = {
-                          ~ ignore_global_filters = false -> (known after apply)
-                          ~ sampling              = 1 -> (known after apply)
+                        ) -> (known after apply)
+                      ~ grid        = {
+                          ~ w = 16 -> 24
                             # (3 unchanged attributes hidden)
                         }
-                    }
-                }
-                # (2 unchanged attributes hidden)
-            },
-          ~ {
-              ~ config_json = jsonencode(
-                    {
-                      - axis    = {
-                          - x = {
-                              - domain = {
-                                  - rounding = false
-                                  - type     = "fit"
-                                }
-                              - grid   = {
-                                  - visible = true
-                                }
-                              - labels = {
-                                  - orientation = "horizontal"
-                                }
-                              - ticks  = {
-                                  - visible = true
-                                }
-                              - title  = {
-                                  - visible = true
-                                }
-                            }
-                          - y = {
-                              - domain = {
-                                  - rounding = true
-                                  - type     = "full"
-                                }
-                              - grid   = {
-                                  - visible = true
-                                }
-                              - labels = {
-                                  - orientation = "horizontal"
-                                }
-                              - scale  = "linear"
-                              - ticks  = {
-                                  - visible = true
-                                }
-                              - title  = {
-                                  - visible = false
+                        id          = "4cd03476-350d-4ca2-beb6-9bcb19f0f56f"
+                      ~ vis_config  = {
+                          ~ by_value = {
+                              ~ xy_chart_config = {
+                                  ~ axis        = {
+                                      ~ x = {
+                                          ~ domain_json       = jsonencode(
+                                                {
+                                                  - rounding = false
+                                                  - type     = "fit"
+                                                }
+                                            ) -> (known after apply)
+                                            # (4 unchanged attributes hidden)
+                                        }
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                  ~ decorations = {
+                                      ~ fill_opacity = 0.3 -> (known after apply)
+                                    }
+                                  ~ layers      = [
+                                      ~ {
+                                          ~ data_layer = {
+                                              ~ ignore_global_filters = false -> (known after apply)
+                                              ~ sampling              = 1 -> (known after apply)
+                                                # (3 unchanged attributes hidden)
+                                            }
+                                            # (1 unchanged attribute hidden)
+                                        },
+                                    ]
+                                  ~ query       = {
+                                      ~ language   = "kql" -> (known after apply)
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                    # (3 unchanged attributes hidden)
                                 }
                             }
                         }
-                      - layers  = [
-                          - {
-                              - data_source           = {
-                                  - index_pattern = "logs-checkout-*"
-                                  - time_field    = "@timestamp"
-                                  - type          = "data_view_spec"
-                                }
-                              - ignore_global_filters = false
-                              - sampling              = 1
-                              - type                  = "line"
-                              - x                     = {
-                                  - drop_partial_intervals  = false
-                                  - field                   = "@timestamp"
-                                  - include_empty_rows      = true
-                                  - operation               = "date_histogram"
-                                  - suggested_interval      = "auto"
-                                  - use_original_time_range = false
-                                }
-                              - y                     = [
-                                  - {
-                                      - color      = {
-                                          - type = "auto"
+                        # (1 unchanged attribute hidden)
+                    },
+                  ~ {
+                      ~ config_json = jsonencode(
+                            {
+                              - axis    = {
+                                  - x = {
+                                      - domain = {
+                                          - rounding = false
+                                          - type     = "fit"
                                         }
-                                      - field      = "duration_ms"
-                                      - operation  = "percentile"
-                                      - percentile = 95
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - y = {
+                                      - domain = {
+                                          - rounding = true
+                                          - type     = "full"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - scale  = "linear"
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                }
+                              - layers  = [
+                                  - {
+                                      - data_source           = {
+                                          - index_pattern = "logs-checkout-*"
+                                          - time_field    = "@timestamp"
+                                          - type          = "data_view_spec"
+                                        }
+                                      - ignore_global_filters = false
+                                      - sampling              = 1
+                                      - type                  = "area"
+                                      - x                     = {
+                                          - drop_partial_intervals  = false
+                                          - field                   = "@timestamp"
+                                          - include_empty_rows      = true
+                                          - operation               = "date_histogram"
+                                          - suggested_interval      = "auto"
+                                          - use_original_time_range = false
+                                        }
+                                      - y                     = [
+                                          - {
+                                              - color         = {
+                                                  - type = "auto"
+                                                }
+                                              - empty_as_null = true
+                                              - operation     = "count"
+                                            },
+                                        ]
                                     },
                                 ]
-                            },
-                        ]
-                      - legend  = {
-                          - layout     = {
-                              - truncate = {
-                                  - max_lines = 1
-                                }
-                              - type     = "grid"
-                            }
-                          - placement  = "outside"
-                          - position   = "bottom"
-                          - visibility = "visible"
-                        }
-                      - styling = {
-                          - fitting       = {
-                              - type = "none"
-                            }
-                          - interpolation = "linear"
-                          - overlays      = {
-                              - current_time_marker = {
-                                  - visible = false
-                                }
-                              - partial_buckets     = {
-                                  - visible = false
-                                }
-                            }
-                          - points        = {
-                              - visibility = "auto"
-                            }
-                        }
-                      - title   = "Latency p95"
-                      - type    = "xy"
-                    }
-                ) -> (known after apply)
-                id          = "af8435e6-c284-48c1-8725-71869ba8afa2"
-              ~ vis_config  = {
-                  ~ by_value = {
-                      ~ xy_chart_config = {
-                          ~ decorations = {
-                              + fill_opacity = (known after apply)
-                            }
-                          ~ layers      = [
-                              ~ {
-                                  ~ data_layer = {
-                                      ~ ignore_global_filters = false -> (known after apply)
-                                      ~ sampling              = 1 -> (known after apply)
-                                        # (3 unchanged attributes hidden)
-                                    }
-                                    # (1 unchanged attribute hidden)
-                                },
-                            ]
-                          ~ query       = {
-                              ~ language   = "kql" -> (known after apply)
-                                # (1 unchanged attribute hidden)
-                            }
-                            # (4 unchanged attributes hidden)
-                        }
-                    }
-                }
-                # (2 unchanged attributes hidden)
-            },
-          ~ {
-              ~ config_json = jsonencode(
-                    {
-                      - axis    = {
-                          - x = {
-                              - domain = {
-                                  - rounding = false
-                                  - type     = "fit"
-                                }
-                              - grid   = {
-                                  - visible = true
-                                }
-                              - labels = {
-                                  - orientation = "horizontal"
-                                }
-                              - ticks  = {
-                                  - visible = true
-                                }
-                              - title  = {
-                                  - visible = true
-                                }
-                            }
-                          - y = {
-                              - domain = {
-                                  - rounding = true
-                                  - type     = "full"
-                                }
-                              - grid   = {
-                                  - visible = true
-                                }
-                              - labels = {
-                                  - orientation = "horizontal"
-                                }
-                              - scale  = "linear"
-                              - ticks  = {
-                                  - visible = true
-                                }
-                              - title  = {
-                                  - visible = false
-                                }
-                            }
-                        }
-                      - layers  = [
-                          - {
-                              - data_source           = {
-                                  - index_pattern = "logs-checkout-*"
-                                  - time_field    = "@timestamp"
-                                  - type          = "data_view_spec"
-                                }
-                              - ignore_global_filters = false
-                              - sampling              = 1
-                              - type                  = "line"
-                              - x                     = {
-                                  - drop_partial_intervals  = false
-                                  - field                   = "@timestamp"
-                                  - include_empty_rows      = true
-                                  - operation               = "date_histogram"
-                                  - suggested_interval      = "auto"
-                                  - use_original_time_range = false
-                                }
-                              - y                     = [
-                                  - {
-                                      - color         = {
-                                          - type = "auto"
+                              - legend  = {
+                                  - layout     = {
+                                      - truncate = {
+                                          - max_lines = 1
                                         }
-                                      - empty_as_null = true
-                                      - operation     = "count"
+                                      - type     = "grid"
+                                    }
+                                  - placement  = "outside"
+                                  - position   = "bottom"
+                                  - visibility = "visible"
+                                }
+                              - styling = {
+                                  - areas         = {
+                                      - fill_opacity = 0.3
+                                    }
+                                  - fitting       = {
+                                      - type = "none"
+                                    }
+                                  - interpolation = "linear"
+                                  - overlays      = {
+                                      - current_time_marker = {
+                                          - visible = false
+                                        }
+                                      - partial_buckets     = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - points        = {
+                                      - visibility = "auto"
+                                    }
+                                }
+                              - title   = "Request rate"
+                              - type    = "xy"
+                            }
+                        ) -> (known after apply)
+                      ~ grid        = {
+                          ~ w = 16 -> 24
+                          ~ x = 16 -> 24
+                            # (2 unchanged attributes hidden)
+                        }
+                        id          = "544f39d1-c90c-415d-b802-71b2ef7f1fff"
+                      ~ vis_config  = {
+                          ~ by_value = {
+                              ~ xy_chart_config = {
+                                  ~ axis        = {
+                                      ~ x = {
+                                          ~ domain_json       = jsonencode(
+                                                {
+                                                  - rounding = false
+                                                  - type     = "fit"
+                                                }
+                                            ) -> (known after apply)
+                                            # (4 unchanged attributes hidden)
+                                        }
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                  ~ decorations = {
+                                      ~ fill_opacity = 0.3 -> (known after apply)
+                                    }
+                                  ~ layers      = [
+                                      ~ {
+                                          ~ data_layer = {
+                                              ~ ignore_global_filters = false -> (known after apply)
+                                              ~ sampling              = 1 -> (known after apply)
+                                                # (3 unchanged attributes hidden)
+                                            }
+                                            # (1 unchanged attribute hidden)
+                                        },
+                                    ]
+                                  ~ query       = {
+                                      ~ language   = "kql" -> (known after apply)
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                    # (3 unchanged attributes hidden)
+                                }
+                            }
+                        }
+                        # (1 unchanged attribute hidden)
+                    },
+                  ~ {
+                      ~ config_json = jsonencode(
+                            {
+                              - axis    = {
+                                  - x = {
+                                      - domain = {
+                                          - rounding = false
+                                          - type     = "fit"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - y = {
+                                      - domain = {
+                                          - rounding = true
+                                          - type     = "full"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - scale  = "linear"
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                }
+                              - layers  = [
+                                  - {
+                                      - data_source           = {
+                                          - index_pattern = "logs-checkout-*"
+                                          - time_field    = "@timestamp"
+                                          - type          = "data_view_spec"
+                                        }
+                                      - ignore_global_filters = false
+                                      - sampling              = 1
+                                      - type                  = "area"
+                                      - x                     = {
+                                          - drop_partial_intervals  = false
+                                          - field                   = "@timestamp"
+                                          - include_empty_rows      = true
+                                          - operation               = "date_histogram"
+                                          - suggested_interval      = "auto"
+                                          - use_original_time_range = false
+                                        }
+                                      - y                     = [
+                                          - {
+                                              - color      = {
+                                                  - type = "auto"
+                                                }
+                                              - field      = "duration_ms"
+                                              - operation  = "percentile"
+                                              - percentile = 99
+                                            },
+                                        ]
                                     },
                                 ]
-                            },
-                        ]
-                      - legend  = {
-                          - layout     = {
-                              - truncate = {
-                                  - max_lines = 1
+                              - legend  = {
+                                  - layout     = {
+                                      - truncate = {
+                                          - max_lines = 1
+                                        }
+                                      - type     = "grid"
+                                    }
+                                  - placement  = "outside"
+                                  - position   = "bottom"
+                                  - visibility = "visible"
                                 }
-                              - type     = "grid"
+                              - styling = {
+                                  - areas         = {
+                                      - fill_opacity = 0.3
+                                    }
+                                  - fitting       = {
+                                      - type = "none"
+                                    }
+                                  - interpolation = "linear"
+                                  - overlays      = {
+                                      - current_time_marker = {
+                                          - visible = false
+                                        }
+                                      - partial_buckets     = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - points        = {
+                                      - visibility = "auto"
+                                    }
+                                }
+                              - title   = "Latency p99"
+                              - type    = "xy"
                             }
-                          - placement  = "outside"
-                          - position   = "bottom"
-                          - visibility = "visible"
+                        ) -> (known after apply)
+                      ~ grid        = {
+                          ~ w = 16 -> 24
+                          ~ x = 32 -> 0
+                            # (2 unchanged attributes hidden)
                         }
-                      - styling = {
-                          - fitting       = {
-                              - type = "none"
-                            }
-                          - interpolation = "linear"
-                          - overlays      = {
-                              - current_time_marker = {
-                                  - visible = false
+                        id          = "fcaec466-de7c-4890-994b-30c98ebb9894"
+                      ~ vis_config  = {
+                          ~ by_value = {
+                              ~ xy_chart_config = {
+                                  ~ axis        = {
+                                      ~ x = {
+                                          ~ domain_json       = jsonencode(
+                                                {
+                                                  - rounding = false
+                                                  - type     = "fit"
+                                                }
+                                            ) -> (known after apply)
+                                            # (4 unchanged attributes hidden)
+                                        }
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                  ~ decorations = {
+                                      ~ fill_opacity = 0.3 -> (known after apply)
+                                    }
+                                  ~ layers      = [
+                                      ~ {
+                                          ~ data_layer = {
+                                              ~ ignore_global_filters = false -> (known after apply)
+                                              ~ sampling              = 1 -> (known after apply)
+                                                # (3 unchanged attributes hidden)
+                                            }
+                                            # (1 unchanged attribute hidden)
+                                        },
+                                    ]
+                                  ~ query       = {
+                                      ~ language   = "kql" -> (known after apply)
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                    # (3 unchanged attributes hidden)
                                 }
-                              - partial_buckets     = {
-                                  - visible = false
-                                }
-                            }
-                          - points        = {
-                              - visibility = "auto"
                             }
                         }
-                      - title   = "Request rate"
-                      - type    = "xy"
-                    }
-                ) -> (known after apply)
-                id          = "fd85b10f-041f-4c21-a22f-8c41b068e85a"
-              ~ vis_config  = {
-                  ~ by_value = {
-                      ~ xy_chart_config = {
-                          ~ decorations = {
-                              + fill_opacity = (known after apply)
+                        # (1 unchanged attribute hidden)
+                    },
+                ]
+                # (3 unchanged attributes hidden)
+            },
+          ~ {
+                id        = "1cf94d3d-5c88-4f73-867e-ac7a696c6c3c"
+              ~ panels    = [
+                  ~ {
+                      ~ config_json = jsonencode(
+                            {
+                              - data_source           = {
+                                  - query = "FROM logs-checkout-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `Requests` = COUNT(*), `Avg latency (ms)` = ROUND(AVG(duration_ms), 0) BY `Status` = TO_STRING(status) | SORT `Requests` DESC"
+                                  - type  = "esql"
+                                }
+                              - ignore_global_filters = false
+                              - metrics               = [
+                                  - {
+                                      - apply_color_to = "badge"
+                                      - color          = {
+                                          - type = "auto"
+                                        }
+                                      - column         = "Requests"
+                                    },
+                                  - {
+                                      - apply_color_to = "badge"
+                                      - color          = {
+                                          - type = "auto"
+                                        }
+                                      - column         = "Avg latency (ms)"
+                                    },
+                                ]
+                              - rows                  = [
+                                  - {
+                                      - column = "Status"
+                                    },
+                                ]
+                              - sampling              = 1
+                              - styling               = {
+                                  - density = {
+                                      - mode = "expanded"
+                                    }
+                                }
+                              - title                 = "Request breakdown by status"
+                              - type                  = "data_table"
                             }
-                          ~ layers      = [
-                              ~ {
-                                  ~ data_layer = {
+                        ) -> (known after apply)
+                        id          = "92d99c87-1f63-4c71-bfdc-e6f5ff638c71"
+                      ~ vis_config  = {
+                          ~ by_value = {
+                              ~ datatable_config = {
+                                  ~ esql = {
                                       ~ ignore_global_filters = false -> (known after apply)
                                       ~ sampling              = 1 -> (known after apply)
-                                        # (3 unchanged attributes hidden)
+                                        # (5 unchanged attributes hidden)
                                     }
-                                    # (1 unchanged attribute hidden)
-                                },
-                            ]
-                          ~ query       = {
-                              ~ language   = "kql" -> (known after apply)
-                                # (1 unchanged attribute hidden)
+                                }
                             }
-                            # (4 unchanged attributes hidden)
                         }
-                    }
-                }
-                # (2 unchanged attributes hidden)
+                        # (2 unchanged attributes hidden)
+                    },
+                ]
+                # (3 unchanged attributes hidden)
             },
         ]
         # (7 unchanged attributes hidden)
@@ -376,368 +554,550 @@ Terraform will perform the following actions:
   # elasticstack_kibana_dashboard.golden_signals["payments"] will be updated in-place
   ~ resource "elasticstack_kibana_dashboard" "golden_signals" {
         id               = "default/9a3e2426-acab-47b8-af40-4dad572f9c66"
-      ~ panels           = [
+      ~ sections         = [
           ~ {
-              ~ config_json = jsonencode(
-                    {
-                      - data_source           = {
-                          - query = "FROM logs-payments-* | WHERE status >= 500 | STATS errors = COUNT(*)"
-                          - type  = "esql"
-                        }
-                      - ignore_global_filters = false
-                      - metrics               = [
-                          - {
-                              - color  = {
-                                  - type = "auto"
-                                }
-                              - column = "errors"
-                              - type   = "primary"
-                            },
-                        ]
-                      - sampling              = 1
-                      - styling               = {
-                          - primary = {
-                              - labels   = {
-                                  - alignment = "left"
-                                }
-                              - position = "bottom"
-                              - value    = {
-                                  - alignment = "right"
-                                  - sizing    = "auto"
-                                }
-                            }
-                        }
-                      - title                 = "Error rate"
-                      - type                  = "metric"
-                    }
-                ) -> (known after apply)
-                id          = "293327c7-f87c-4fba-a359-06c86770824b"
-              ~ vis_config  = {
-                  ~ by_value = {
-                      ~ metric_chart_config = {
-                          ~ data_source_json      = jsonencode(
-                              ~ {
-                                  ~ query = "FROM logs-payments-* | WHERE status >= 500 | STATS errors = COUNT(*)" -> "FROM logs-payments-* | WHERE status >= 400 | STATS errors = COUNT(*)"
+                id        = "ea763a0d-cb3c-4685-8b94-1c854ac12f3b"
+              ~ panels    = [
+                  ~ {
+                      ~ config_json = jsonencode(
+                          ~ {
+                              ~ data_source           = {
+                                  ~ query = "FROM logs-payments-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))" -> "FROM logs-payments-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 503, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
                                     # (1 unchanged attribute hidden)
                                 }
-                            )
-                          ~ ignore_global_filters = false -> (known after apply)
-                          ~ sampling              = 1 -> (known after apply)
-                            # (2 unchanged attributes hidden)
-                        }
-                    }
-                }
-                # (2 unchanged attributes hidden)
+                                # (5 unchanged attributes hidden)
+                            }
+                        )
+                        id          = "bd3e9e5d-85dc-4320-86ab-74c28e4727e9"
+                        # (2 unchanged attributes hidden)
+                    },
+                    # (3 unchanged elements hidden)
+                ]
+                # (3 unchanged attributes hidden)
             },
           ~ {
-              ~ config_json = jsonencode(
-                    {
-                      - data_source           = {
-                          - query = "FROM logs-payments-* | STATS p95 = PERCENTILE(provider_ms, 95)"
-                          - type  = "esql"
-                        }
-                      - ignore_global_filters = false
-                      - metrics               = [
-                          - {
-                              - color  = {
-                                  - type = "auto"
+                id        = "3341a3ef-051f-403a-94bc-6459c485f702"
+              ~ panels    = [
+                  ~ {
+                      ~ config_json = jsonencode(
+                            {
+                              - axis    = {
+                                  - x = {
+                                      - domain = {
+                                          - rounding = false
+                                          - type     = "fit"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - y = {
+                                      - domain = {
+                                          - rounding = true
+                                          - type     = "full"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - scale  = "linear"
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
                                 }
-                              - column = "p95"
-                              - type   = "primary"
-                            },
-                        ]
-                      - sampling              = 1
-                      - styling               = {
-                          - primary = {
-                              - labels   = {
-                                  - alignment = "left"
+                              - layers  = [
+                                  - {
+                                      - data_source           = {
+                                          - index_pattern = "logs-payments-*"
+                                          - time_field    = "@timestamp"
+                                          - type          = "data_view_spec"
+                                        }
+                                      - ignore_global_filters = false
+                                      - sampling              = 1
+                                      - type                  = "area"
+                                      - x                     = {
+                                          - drop_partial_intervals  = false
+                                          - field                   = "@timestamp"
+                                          - include_empty_rows      = true
+                                          - operation               = "date_histogram"
+                                          - suggested_interval      = "auto"
+                                          - use_original_time_range = false
+                                        }
+                                      - y                     = [
+                                          - {
+                                              - color      = {
+                                                  - type = "auto"
+                                                }
+                                              - field      = "duration_ms"
+                                              - operation  = "percentile"
+                                              - percentile = 95
+                                            },
+                                        ]
+                                    },
+                                ]
+                              - legend  = {
+                                  - layout     = {
+                                      - truncate = {
+                                          - max_lines = 1
+                                        }
+                                      - type     = "grid"
+                                    }
+                                  - placement  = "outside"
+                                  - position   = "bottom"
+                                  - visibility = "visible"
                                 }
-                              - position = "bottom"
-                              - value    = {
-                                  - alignment = "right"
-                                  - sizing    = "auto"
+                              - styling = {
+                                  - areas         = {
+                                      - fill_opacity = 0.3
+                                    }
+                                  - fitting       = {
+                                      - type = "none"
+                                    }
+                                  - interpolation = "linear"
+                                  - overlays      = {
+                                      - current_time_marker = {
+                                          - visible = false
+                                        }
+                                      - partial_buckets     = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - points        = {
+                                      - visibility = "auto"
+                                    }
                                 }
+                              - title   = "Latency p95"
+                              - type    = "xy"
                             }
-                        }
-                      - title                 = "Provider latency p95"
-                      - type                  = "metric"
-                    }
-                ) -> (known after apply)
-                id          = "a92301ef-db1e-4049-9d13-cfa29ac164e8"
-              ~ vis_config  = {
-                  ~ by_value = {
-                      ~ metric_chart_config = {
-                          ~ ignore_global_filters = false -> (known after apply)
-                          ~ sampling              = 1 -> (known after apply)
+                        ) -> (known after apply)
+                      ~ grid        = {
+                          ~ w = 16 -> 24
                             # (3 unchanged attributes hidden)
                         }
-                    }
-                }
-                # (2 unchanged attributes hidden)
-            },
-          ~ {
-              ~ config_json = jsonencode(
-                    {
-                      - axis    = {
-                          - x = {
-                              - domain = {
-                                  - rounding = false
-                                  - type     = "fit"
-                                }
-                              - grid   = {
-                                  - visible = true
-                                }
-                              - labels = {
-                                  - orientation = "horizontal"
-                                }
-                              - ticks  = {
-                                  - visible = true
-                                }
-                              - title  = {
-                                  - visible = true
-                                }
-                            }
-                          - y = {
-                              - domain = {
-                                  - rounding = true
-                                  - type     = "full"
-                                }
-                              - grid   = {
-                                  - visible = true
-                                }
-                              - labels = {
-                                  - orientation = "horizontal"
-                                }
-                              - scale  = "linear"
-                              - ticks  = {
-                                  - visible = true
-                                }
-                              - title  = {
-                                  - visible = false
+                        id          = "b61773fd-d8c5-44f4-9a36-47c933d82dbe"
+                      ~ vis_config  = {
+                          ~ by_value = {
+                              ~ xy_chart_config = {
+                                  ~ axis        = {
+                                      ~ x = {
+                                          ~ domain_json       = jsonencode(
+                                                {
+                                                  - rounding = false
+                                                  - type     = "fit"
+                                                }
+                                            ) -> (known after apply)
+                                            # (4 unchanged attributes hidden)
+                                        }
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                  ~ decorations = {
+                                      ~ fill_opacity = 0.3 -> (known after apply)
+                                    }
+                                  ~ layers      = [
+                                      ~ {
+                                          ~ data_layer = {
+                                              ~ ignore_global_filters = false -> (known after apply)
+                                              ~ sampling              = 1 -> (known after apply)
+                                                # (3 unchanged attributes hidden)
+                                            }
+                                            # (1 unchanged attribute hidden)
+                                        },
+                                    ]
+                                  ~ query       = {
+                                      ~ language   = "kql" -> (known after apply)
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                    # (3 unchanged attributes hidden)
                                 }
                             }
                         }
-                      - layers  = [
-                          - {
-                              - data_source           = {
-                                  - index_pattern = "logs-payments-*"
-                                  - time_field    = "@timestamp"
-                                  - type          = "data_view_spec"
-                                }
-                              - ignore_global_filters = false
-                              - sampling              = 1
-                              - type                  = "line"
-                              - x                     = {
-                                  - drop_partial_intervals  = false
-                                  - field                   = "@timestamp"
-                                  - include_empty_rows      = true
-                                  - operation               = "date_histogram"
-                                  - suggested_interval      = "auto"
-                                  - use_original_time_range = false
-                                }
-                              - y                     = [
-                                  - {
-                                      - color      = {
-                                          - type = "auto"
+                        # (1 unchanged attribute hidden)
+                    },
+                  ~ {
+                      ~ config_json = jsonencode(
+                            {
+                              - axis    = {
+                                  - x = {
+                                      - domain = {
+                                          - rounding = false
+                                          - type     = "fit"
                                         }
-                                      - field      = "duration_ms"
-                                      - operation  = "percentile"
-                                      - percentile = 95
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - y = {
+                                      - domain = {
+                                          - rounding = true
+                                          - type     = "full"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - scale  = "linear"
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                }
+                              - layers  = [
+                                  - {
+                                      - data_source           = {
+                                          - index_pattern = "logs-payments-*"
+                                          - time_field    = "@timestamp"
+                                          - type          = "data_view_spec"
+                                        }
+                                      - ignore_global_filters = false
+                                      - sampling              = 1
+                                      - type                  = "area"
+                                      - x                     = {
+                                          - drop_partial_intervals  = false
+                                          - field                   = "@timestamp"
+                                          - include_empty_rows      = true
+                                          - operation               = "date_histogram"
+                                          - suggested_interval      = "auto"
+                                          - use_original_time_range = false
+                                        }
+                                      - y                     = [
+                                          - {
+                                              - color         = {
+                                                  - type = "auto"
+                                                }
+                                              - empty_as_null = true
+                                              - operation     = "count"
+                                            },
+                                        ]
                                     },
                                 ]
-                            },
-                        ]
-                      - legend  = {
-                          - layout     = {
-                              - truncate = {
-                                  - max_lines = 1
-                                }
-                              - type     = "grid"
-                            }
-                          - placement  = "outside"
-                          - position   = "bottom"
-                          - visibility = "visible"
-                        }
-                      - styling = {
-                          - fitting       = {
-                              - type = "none"
-                            }
-                          - interpolation = "linear"
-                          - overlays      = {
-                              - current_time_marker = {
-                                  - visible = false
-                                }
-                              - partial_buckets     = {
-                                  - visible = false
-                                }
-                            }
-                          - points        = {
-                              - visibility = "auto"
-                            }
-                        }
-                      - title   = "Latency p95"
-                      - type    = "xy"
-                    }
-                ) -> (known after apply)
-                id          = "52e31d0c-c215-417f-b415-95a48807e9b8"
-              ~ vis_config  = {
-                  ~ by_value = {
-                      ~ xy_chart_config = {
-                          ~ decorations = {
-                              + fill_opacity = (known after apply)
-                            }
-                          ~ layers      = [
-                              ~ {
-                                  ~ data_layer = {
-                                      ~ ignore_global_filters = false -> (known after apply)
-                                      ~ sampling              = 1 -> (known after apply)
-                                        # (3 unchanged attributes hidden)
-                                    }
-                                    # (1 unchanged attribute hidden)
-                                },
-                            ]
-                          ~ query       = {
-                              ~ language   = "kql" -> (known after apply)
-                                # (1 unchanged attribute hidden)
-                            }
-                            # (4 unchanged attributes hidden)
-                        }
-                    }
-                }
-                # (2 unchanged attributes hidden)
-            },
-          ~ {
-              ~ config_json = jsonencode(
-                    {
-                      - axis    = {
-                          - x = {
-                              - domain = {
-                                  - rounding = false
-                                  - type     = "fit"
-                                }
-                              - grid   = {
-                                  - visible = true
-                                }
-                              - labels = {
-                                  - orientation = "horizontal"
-                                }
-                              - ticks  = {
-                                  - visible = true
-                                }
-                              - title  = {
-                                  - visible = true
-                                }
-                            }
-                          - y = {
-                              - domain = {
-                                  - rounding = true
-                                  - type     = "full"
-                                }
-                              - grid   = {
-                                  - visible = true
-                                }
-                              - labels = {
-                                  - orientation = "horizontal"
-                                }
-                              - scale  = "linear"
-                              - ticks  = {
-                                  - visible = true
-                                }
-                              - title  = {
-                                  - visible = false
-                                }
-                            }
-                        }
-                      - layers  = [
-                          - {
-                              - data_source           = {
-                                  - index_pattern = "logs-payments-*"
-                                  - time_field    = "@timestamp"
-                                  - type          = "data_view_spec"
-                                }
-                              - ignore_global_filters = false
-                              - sampling              = 1
-                              - type                  = "line"
-                              - x                     = {
-                                  - drop_partial_intervals  = false
-                                  - field                   = "@timestamp"
-                                  - include_empty_rows      = true
-                                  - operation               = "date_histogram"
-                                  - suggested_interval      = "auto"
-                                  - use_original_time_range = false
-                                }
-                              - y                     = [
-                                  - {
-                                      - color         = {
-                                          - type = "auto"
+                              - legend  = {
+                                  - layout     = {
+                                      - truncate = {
+                                          - max_lines = 1
                                         }
-                                      - empty_as_null = true
-                                      - operation     = "count"
+                                      - type     = "grid"
+                                    }
+                                  - placement  = "outside"
+                                  - position   = "bottom"
+                                  - visibility = "visible"
+                                }
+                              - styling = {
+                                  - areas         = {
+                                      - fill_opacity = 0.3
+                                    }
+                                  - fitting       = {
+                                      - type = "none"
+                                    }
+                                  - interpolation = "linear"
+                                  - overlays      = {
+                                      - current_time_marker = {
+                                          - visible = false
+                                        }
+                                      - partial_buckets     = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - points        = {
+                                      - visibility = "auto"
+                                    }
+                                }
+                              - title   = "Request rate"
+                              - type    = "xy"
+                            }
+                        ) -> (known after apply)
+                      ~ grid        = {
+                          ~ w = 16 -> 24
+                          ~ x = 16 -> 24
+                            # (2 unchanged attributes hidden)
+                        }
+                        id          = "83f2139d-3783-4629-8fce-d86070a0c95f"
+                      ~ vis_config  = {
+                          ~ by_value = {
+                              ~ xy_chart_config = {
+                                  ~ axis        = {
+                                      ~ x = {
+                                          ~ domain_json       = jsonencode(
+                                                {
+                                                  - rounding = false
+                                                  - type     = "fit"
+                                                }
+                                            ) -> (known after apply)
+                                            # (4 unchanged attributes hidden)
+                                        }
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                  ~ decorations = {
+                                      ~ fill_opacity = 0.3 -> (known after apply)
+                                    }
+                                  ~ layers      = [
+                                      ~ {
+                                          ~ data_layer = {
+                                              ~ ignore_global_filters = false -> (known after apply)
+                                              ~ sampling              = 1 -> (known after apply)
+                                                # (3 unchanged attributes hidden)
+                                            }
+                                            # (1 unchanged attribute hidden)
+                                        },
+                                    ]
+                                  ~ query       = {
+                                      ~ language   = "kql" -> (known after apply)
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                    # (3 unchanged attributes hidden)
+                                }
+                            }
+                        }
+                        # (1 unchanged attribute hidden)
+                    },
+                  ~ {
+                      ~ config_json = jsonencode(
+                            {
+                              - axis    = {
+                                  - x = {
+                                      - domain = {
+                                          - rounding = false
+                                          - type     = "fit"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - y = {
+                                      - domain = {
+                                          - rounding = true
+                                          - type     = "full"
+                                        }
+                                      - grid   = {
+                                          - visible = true
+                                        }
+                                      - labels = {
+                                          - orientation = "horizontal"
+                                        }
+                                      - scale  = "linear"
+                                      - ticks  = {
+                                          - visible = true
+                                        }
+                                      - title  = {
+                                          - visible = false
+                                        }
+                                    }
+                                }
+                              - layers  = [
+                                  - {
+                                      - data_source           = {
+                                          - index_pattern = "logs-payments-*"
+                                          - time_field    = "@timestamp"
+                                          - type          = "data_view_spec"
+                                        }
+                                      - ignore_global_filters = false
+                                      - sampling              = 1
+                                      - type                  = "area"
+                                      - x                     = {
+                                          - drop_partial_intervals  = false
+                                          - field                   = "@timestamp"
+                                          - include_empty_rows      = true
+                                          - operation               = "date_histogram"
+                                          - suggested_interval      = "auto"
+                                          - use_original_time_range = false
+                                        }
+                                      - y                     = [
+                                          - {
+                                              - color      = {
+                                                  - type = "auto"
+                                                }
+                                              - field      = "duration_ms"
+                                              - operation  = "percentile"
+                                              - percentile = 99
+                                            },
+                                        ]
                                     },
                                 ]
-                            },
-                        ]
-                      - legend  = {
-                          - layout     = {
-                              - truncate = {
-                                  - max_lines = 1
+                              - legend  = {
+                                  - layout     = {
+                                      - truncate = {
+                                          - max_lines = 1
+                                        }
+                                      - type     = "grid"
+                                    }
+                                  - placement  = "outside"
+                                  - position   = "bottom"
+                                  - visibility = "visible"
                                 }
-                              - type     = "grid"
+                              - styling = {
+                                  - areas         = {
+                                      - fill_opacity = 0.3
+                                    }
+                                  - fitting       = {
+                                      - type = "none"
+                                    }
+                                  - interpolation = "linear"
+                                  - overlays      = {
+                                      - current_time_marker = {
+                                          - visible = false
+                                        }
+                                      - partial_buckets     = {
+                                          - visible = false
+                                        }
+                                    }
+                                  - points        = {
+                                      - visibility = "auto"
+                                    }
+                                }
+                              - title   = "Latency p99"
+                              - type    = "xy"
                             }
-                          - placement  = "outside"
-                          - position   = "bottom"
-                          - visibility = "visible"
+                        ) -> (known after apply)
+                      ~ grid        = {
+                          ~ w = 16 -> 24
+                          ~ x = 32 -> 0
+                            # (2 unchanged attributes hidden)
                         }
-                      - styling = {
-                          - fitting       = {
-                              - type = "none"
-                            }
-                          - interpolation = "linear"
-                          - overlays      = {
-                              - current_time_marker = {
-                                  - visible = false
+                        id          = "517ca0b5-4035-4e78-9f9e-2fb1929911d3"
+                      ~ vis_config  = {
+                          ~ by_value = {
+                              ~ xy_chart_config = {
+                                  ~ axis        = {
+                                      ~ x = {
+                                          ~ domain_json       = jsonencode(
+                                                {
+                                                  - rounding = false
+                                                  - type     = "fit"
+                                                }
+                                            ) -> (known after apply)
+                                            # (4 unchanged attributes hidden)
+                                        }
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                  ~ decorations = {
+                                      ~ fill_opacity = 0.3 -> (known after apply)
+                                    }
+                                  ~ layers      = [
+                                      ~ {
+                                          ~ data_layer = {
+                                              ~ ignore_global_filters = false -> (known after apply)
+                                              ~ sampling              = 1 -> (known after apply)
+                                                # (3 unchanged attributes hidden)
+                                            }
+                                            # (1 unchanged attribute hidden)
+                                        },
+                                    ]
+                                  ~ query       = {
+                                      ~ language   = "kql" -> (known after apply)
+                                        # (1 unchanged attribute hidden)
+                                    }
+                                    # (3 unchanged attributes hidden)
                                 }
-                              - partial_buckets     = {
-                                  - visible = false
-                                }
-                            }
-                          - points        = {
-                              - visibility = "auto"
                             }
                         }
-                      - title   = "Request rate"
-                      - type    = "xy"
-                    }
-                ) -> (known after apply)
-                id          = "fedb2cf3-7b72-4173-b36f-bdd412322fba"
-              ~ vis_config  = {
-                  ~ by_value = {
-                      ~ xy_chart_config = {
-                          ~ decorations = {
-                              + fill_opacity = (known after apply)
+                        # (1 unchanged attribute hidden)
+                    },
+                ]
+                # (3 unchanged attributes hidden)
+            },
+          ~ {
+                id        = "7ff20367-c8ca-46d7-aa7d-c8e7b948ecd5"
+              ~ panels    = [
+                  ~ {
+                      ~ config_json = jsonencode(
+                            {
+                              - data_source           = {
+                                  - query = "FROM logs-payments-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `Requests` = COUNT(*), `Avg latency (ms)` = ROUND(AVG(duration_ms), 0) BY `Status` = TO_STRING(status) | SORT `Requests` DESC"
+                                  - type  = "esql"
+                                }
+                              - ignore_global_filters = false
+                              - metrics               = [
+                                  - {
+                                      - apply_color_to = "badge"
+                                      - color          = {
+                                          - type = "auto"
+                                        }
+                                      - column         = "Requests"
+                                    },
+                                  - {
+                                      - apply_color_to = "badge"
+                                      - color          = {
+                                          - type = "auto"
+                                        }
+                                      - column         = "Avg latency (ms)"
+                                    },
+                                ]
+                              - rows                  = [
+                                  - {
+                                      - column = "Status"
+                                    },
+                                ]
+                              - sampling              = 1
+                              - styling               = {
+                                  - density = {
+                                      - mode = "expanded"
+                                    }
+                                }
+                              - title                 = "Request breakdown by status"
+                              - type                  = "data_table"
                             }
-                          ~ layers      = [
-                              ~ {
-                                  ~ data_layer = {
+                        ) -> (known after apply)
+                        id          = "b391d835-8af0-4e48-b341-d3dc1a931314"
+                      ~ vis_config  = {
+                          ~ by_value = {
+                              ~ datatable_config = {
+                                  ~ esql = {
                                       ~ ignore_global_filters = false -> (known after apply)
                                       ~ sampling              = 1 -> (known after apply)
-                                        # (3 unchanged attributes hidden)
+                                        # (5 unchanged attributes hidden)
                                     }
-                                    # (1 unchanged attribute hidden)
-                                },
-                            ]
-                          ~ query       = {
-                              ~ language   = "kql" -> (known after apply)
-                                # (1 unchanged attribute hidden)
+                                }
                             }
-                            # (4 unchanged attributes hidden)
                         }
-                    }
-                }
-                # (2 unchanged attributes hidden)
+                        # (2 unchanged attributes hidden)
+                    },
+                ]
+                # (3 unchanged attributes hidden)
             },
         ]
         # (7 unchanged attributes hidden)
     }
 
 Plan: 0 to add, 2 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
