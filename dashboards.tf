@@ -46,7 +46,7 @@ locals {
       title                 = ""
       x_json                = ""
       y_json                = ""
-      esql_query_tpl        = "FROM {idx} | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
+      esql_query_tpl        = "FROM {idx} | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
       esql_column           = "5xx errors"
       esql_secondary_column = "4xx errors"
       esql_format           = { type = "number", params = { decimals = 0 } }
@@ -57,7 +57,7 @@ locals {
       x_json                = ""
       y_json                = ""
       # Saturation reads from the metrics index, so this query is not parameterized by {idx}.
-      esql_query_tpl        = "FROM metrics-payments-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `Avg CPU %` = ROUND(AVG(cpu.pct) * 100, 1), `Peak CPU %` = ROUND(MAX(cpu.pct) * 100, 1)"
+      esql_query_tpl        = "TS metrics-payments-* | STATS `Avg CPU %` = ROUND(AVG(cpu.pct) * 100, 1), `Peak CPU %` = ROUND(MAX(cpu.pct) * 100, 1)"
       esql_column           = "Avg CPU %"
       esql_secondary_column = "Peak CPU %"
       esql_format           = { type = "number", params = { decimals = 2 } }
@@ -67,7 +67,7 @@ locals {
       title                 = ""
       x_json                = ""
       y_json                = ""
-      esql_query_tpl        = "FROM {idx} | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `Total cart value` = ROUND(SUM(cart_total), 2), `Avg cart value` = ROUND(AVG(cart_total), 2)"
+      esql_query_tpl        = "FROM {idx} | STATS `Total cart value` = ROUND(SUM(cart_total), 2), `Avg cart value` = ROUND(AVG(cart_total), 2)"
       esql_column           = "Total cart value"
       esql_secondary_column = "Avg cart value"
       esql_format           = { type = "number", params = { decimals = 2 } }
@@ -77,7 +77,7 @@ locals {
       title                 = ""
       x_json                = ""
       y_json                = ""
-      esql_query_tpl        = "FROM {idx} | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `Total requests` = COUNT(*)"
+      esql_query_tpl        = "FROM {idx} | STATS `Total requests` = COUNT(*)"
       esql_column           = "Total requests"
       esql_secondary_column = ""
       esql_format           = { type = "number", params = { decimals = 0 } }
@@ -87,7 +87,7 @@ locals {
       title                 = ""
       x_json                = ""
       y_json                = ""
-      esql_query_tpl        = "FROM {idx} | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `Avg latency (ms)` = ROUND(AVG(duration_ms), 0), `p99 (ms)` = ROUND(PERCENTILE(duration_ms, 99), 0)"
+      esql_query_tpl        = "FROM {idx} | STATS `Avg latency (ms)` = ROUND(AVG(duration_ms), 0), `p99 (ms)` = ROUND(PERCENTILE(duration_ms, 99), 0)"
       esql_column           = "Avg latency (ms)"
       esql_secondary_column = "p99 (ms)"
       esql_format           = { type = "number", params = { decimals = 0 } }
@@ -257,7 +257,7 @@ resource "elasticstack_kibana_dashboard" "golden_signals" {
                 title            = "Request breakdown by status"
                 data_source_json = jsonencode({
                   type  = "esql"
-                  query = "FROM ${each.value.index} | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `Requests` = COUNT(*), `Avg latency (ms)` = ROUND(AVG(duration_ms), 0) BY `Status` = TO_STRING(status) | SORT `Requests` DESC"
+                  query = "FROM ${each.value.index} | STATS `Requests` = COUNT(*), `Avg latency (ms)` = ROUND(AVG(duration_ms), 0) BY `Status` = TO_STRING(status) | SORT `Requests` DESC"
                 })
                 metrics = [
                   {
