@@ -46,7 +46,7 @@ locals {
       title                 = ""
       x_json                = ""
       y_json                = ""
-      esql_query_tpl        = "FROM {idx} | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
+      esql_query_tpl        = "FROM {idx} | STATS `5xx errors` = COUNT(CASE(status >= 503, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
       esql_column           = "5xx errors"
       esql_secondary_column = "4xx errors"
       esql_format           = { type = "number", params = { decimals = 0 } }

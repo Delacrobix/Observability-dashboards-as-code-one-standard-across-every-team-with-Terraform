@@ -1,13 +1,13 @@
 diff --git a/dashboards.tf b/dashboards.tf
-index e020635..41b7efc 100644
+index c9b48b7..1c91d27 100644
 --- a/dashboards.tf
 +++ b/dashboards.tf
 @@ -46,7 +46,7 @@ locals {
        title                 = ""
        x_json                = ""
        y_json                = ""
--      esql_query_tpl        = "FROM {idx} | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
-+      esql_query_tpl        = "FROM {idx} | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 503, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
+-      esql_query_tpl        = "FROM {idx} | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
++      esql_query_tpl        = "FROM {idx} | STATS `5xx errors` = COUNT(CASE(status >= 503, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
        esql_column           = "5xx errors"
        esql_secondary_column = "4xx errors"
        esql_format           = { type = "number", params = { decimals = 0 } }

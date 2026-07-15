@@ -1,3 +1,4 @@
+elasticstack_elasticsearch_index_template.metrics_payments: Refreshing state... [id=YxmDkf9DSwWpvcCLv98q8A/metrics-payments]
 elasticstack_kibana_dashboard.golden_signals["payments"]: Refreshing state... [id=default/9a3e2426-acab-47b8-af40-4dad572f9c66]
 elasticstack_kibana_dashboard.golden_signals["checkout"]: Refreshing state... [id=default/55368936-2217-44c8-a7e6-a6ec4dd4eb98]
 
@@ -18,7 +19,7 @@ Terraform will perform the following actions:
                       ~ config_json = jsonencode(
                           ~ {
                               ~ data_source           = {
-                                  ~ query = "FROM logs-checkout-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))" -> "FROM logs-checkout-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 503, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
+                                  ~ query = "FROM logs-checkout-* | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))" -> "FROM logs-checkout-* | STATS `5xx errors` = COUNT(CASE(status >= 503, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
                                     # (1 unchanged attribute hidden)
                                 }
                                 # (5 unchanged attributes hidden)
@@ -141,10 +142,6 @@ Terraform will perform the following actions:
                               - type    = "xy"
                             }
                         ) -> (known after apply)
-                      ~ grid        = {
-                          ~ w = 16 -> 24
-                            # (3 unchanged attributes hidden)
-                        }
                         id          = "4cd03476-350d-4ca2-beb6-9bcb19f0f56f"
                       ~ vis_config  = {
                           ~ by_value = {
@@ -182,7 +179,7 @@ Terraform will perform the following actions:
                                 }
                             }
                         }
-                        # (1 unchanged attribute hidden)
+                        # (2 unchanged attributes hidden)
                     },
                   ~ {
                       ~ config_json = jsonencode(
@@ -290,11 +287,6 @@ Terraform will perform the following actions:
                               - type    = "xy"
                             }
                         ) -> (known after apply)
-                      ~ grid        = {
-                          ~ w = 16 -> 24
-                          ~ x = 16 -> 24
-                            # (2 unchanged attributes hidden)
-                        }
                         id          = "544f39d1-c90c-415d-b802-71b2ef7f1fff"
                       ~ vis_config  = {
                           ~ by_value = {
@@ -332,7 +324,7 @@ Terraform will perform the following actions:
                                 }
                             }
                         }
-                        # (1 unchanged attribute hidden)
+                        # (2 unchanged attributes hidden)
                     },
                   ~ {
                       ~ config_json = jsonencode(
@@ -441,11 +433,6 @@ Terraform will perform the following actions:
                               - type    = "xy"
                             }
                         ) -> (known after apply)
-                      ~ grid        = {
-                          ~ w = 16 -> 24
-                          ~ x = 32 -> 0
-                            # (2 unchanged attributes hidden)
-                        }
                         id          = "fcaec466-de7c-4890-994b-30c98ebb9894"
                       ~ vis_config  = {
                           ~ by_value = {
@@ -483,7 +470,7 @@ Terraform will perform the following actions:
                                 }
                             }
                         }
-                        # (1 unchanged attribute hidden)
+                        # (2 unchanged attributes hidden)
                     },
                 ]
                 # (3 unchanged attributes hidden)
@@ -495,7 +482,7 @@ Terraform will perform the following actions:
                       ~ config_json = jsonencode(
                             {
                               - data_source           = {
-                                  - query = "FROM logs-checkout-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `Requests` = COUNT(*), `Avg latency (ms)` = ROUND(AVG(duration_ms), 0) BY `Status` = TO_STRING(status) | SORT `Requests` DESC"
+                                  - query = "FROM logs-checkout-* | STATS `Requests` = COUNT(*), `Avg latency (ms)` = ROUND(AVG(duration_ms), 0) BY `Status` = TO_STRING(status) | SORT `Requests` DESC"
                                   - type  = "esql"
                                 }
                               - ignore_global_filters = false
@@ -562,7 +549,7 @@ Terraform will perform the following actions:
                       ~ config_json = jsonencode(
                           ~ {
                               ~ data_source           = {
-                                  ~ query = "FROM logs-payments-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))" -> "FROM logs-payments-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `5xx errors` = COUNT(CASE(status >= 503, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
+                                  ~ query = "FROM logs-payments-* | STATS `5xx errors` = COUNT(CASE(status >= 500, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))" -> "FROM logs-payments-* | STATS `5xx errors` = COUNT(CASE(status >= 503, 1, null)), `4xx errors` = COUNT(CASE(status >= 400 AND status < 500, 1, null))"
                                     # (1 unchanged attribute hidden)
                                 }
                                 # (5 unchanged attributes hidden)
@@ -685,10 +672,6 @@ Terraform will perform the following actions:
                               - type    = "xy"
                             }
                         ) -> (known after apply)
-                      ~ grid        = {
-                          ~ w = 16 -> 24
-                            # (3 unchanged attributes hidden)
-                        }
                         id          = "b61773fd-d8c5-44f4-9a36-47c933d82dbe"
                       ~ vis_config  = {
                           ~ by_value = {
@@ -726,7 +709,7 @@ Terraform will perform the following actions:
                                 }
                             }
                         }
-                        # (1 unchanged attribute hidden)
+                        # (2 unchanged attributes hidden)
                     },
                   ~ {
                       ~ config_json = jsonencode(
@@ -834,11 +817,6 @@ Terraform will perform the following actions:
                               - type    = "xy"
                             }
                         ) -> (known after apply)
-                      ~ grid        = {
-                          ~ w = 16 -> 24
-                          ~ x = 16 -> 24
-                            # (2 unchanged attributes hidden)
-                        }
                         id          = "83f2139d-3783-4629-8fce-d86070a0c95f"
                       ~ vis_config  = {
                           ~ by_value = {
@@ -876,7 +854,7 @@ Terraform will perform the following actions:
                                 }
                             }
                         }
-                        # (1 unchanged attribute hidden)
+                        # (2 unchanged attributes hidden)
                     },
                   ~ {
                       ~ config_json = jsonencode(
@@ -985,11 +963,6 @@ Terraform will perform the following actions:
                               - type    = "xy"
                             }
                         ) -> (known after apply)
-                      ~ grid        = {
-                          ~ w = 16 -> 24
-                          ~ x = 32 -> 0
-                            # (2 unchanged attributes hidden)
-                        }
                         id          = "517ca0b5-4035-4e78-9f9e-2fb1929911d3"
                       ~ vis_config  = {
                           ~ by_value = {
@@ -1027,7 +1000,7 @@ Terraform will perform the following actions:
                                 }
                             }
                         }
-                        # (1 unchanged attribute hidden)
+                        # (2 unchanged attributes hidden)
                     },
                 ]
                 # (3 unchanged attributes hidden)
@@ -1039,7 +1012,7 @@ Terraform will perform the following actions:
                       ~ config_json = jsonencode(
                             {
                               - data_source           = {
-                                  - query = "FROM logs-payments-* | WHERE @timestamp <= ?_tend AND @timestamp > ?_tstart | STATS `Requests` = COUNT(*), `Avg latency (ms)` = ROUND(AVG(duration_ms), 0) BY `Status` = TO_STRING(status) | SORT `Requests` DESC"
+                                  - query = "FROM logs-payments-* | STATS `Requests` = COUNT(*), `Avg latency (ms)` = ROUND(AVG(duration_ms), 0) BY `Status` = TO_STRING(status) | SORT `Requests` DESC"
                                   - type  = "esql"
                                 }
                               - ignore_global_filters = false
