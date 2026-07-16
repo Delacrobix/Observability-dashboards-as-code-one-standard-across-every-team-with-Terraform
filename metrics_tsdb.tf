@@ -1,7 +1,7 @@
-# Turns metrics-payments-* into a time series data stream (TSDS) so the
-# saturation panel can use the ES|QL TS command. A TSDS needs index.mode
-# set to time_series plus at least one dimension field; cpu.pct is marked
-# as a gauge metric.
+# Turns data streams matching metrics-payments-* into TSDB so the
+# saturation panel can use the ES|QL TS command. TSDB needs data streams
+# with index.mode set to time_series plus at least one dimension field;
+# cpu.pct is marked as a gauge metric.
 resource "elasticstack_elasticsearch_index_template" "metrics_payments" {
   name           = "metrics-payments"
   priority       = 200
@@ -13,7 +13,7 @@ resource "elasticstack_elasticsearch_index_template" "metrics_payments" {
     settings = jsonencode({
       index = {
         mode = "time_series"
-        # The seed script writes several hours of history; widen the TSDS
+        # The seed script writes several hours of history; widen the TSDB
         # accepted time window so those documents are not rejected.
         look_back_time = "12h"
       }
